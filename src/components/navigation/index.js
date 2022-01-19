@@ -10,12 +10,18 @@ import LoggedOut from "./LoggedOut";
 
 export default function Navigation() {
   // const token = useSelector(selectToken);
-
   // const loginLogoutControls = token ? <LoggedIn /> : <LoggedOut />;
 
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand as={NavLink} to="/">
+      <Navbar.Brand as={NavLink} to="/" style={{ paddingLeft: "10px" }}>
+        <img
+          src="https://archives.bulbagarden.net/media/upload/a/a6/SugimoriPokeBall.png"
+          width="30"
+          height="30"
+          className="d-inline-block align-top"
+          alt="logo"
+        />{" "}
         PokeTrainer!
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />

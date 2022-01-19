@@ -30,9 +30,9 @@ export const register = (username, email, password) => {
     dispatch(appLoading());
     try {
       const response = await axios.post(`${apiUrl}/auth/register`, {
-        username,
-        email,
-        password,
+        username: username,
+        email: email,
+        password: password,
       });
 
       dispatch(loginSuccess(response.data));

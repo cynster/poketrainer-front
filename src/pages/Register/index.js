@@ -2,10 +2,7 @@ import { useNavigate, Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import Container from "react-bootstrap/Container";
-import Form from "react-bootstrap/Form";
-import { Col } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
+import { Container, Form, Col, Button, Card } from "react-bootstrap";
 
 import { register } from "../../store/trainers/actions";
 import { selectToken } from "../../store/trainers/selectors";
@@ -37,8 +34,10 @@ export default function Register() {
   return (
     <>
       <Container>
+      <Card className="mt-5">
+          <Card.Header>Register</Card.Header>
+
         <Form as={Col} md={{ span: 6, offset: 3 }} className="mt-5">
-          <h1 className="mt-5 mb-5">Register as a trainer!</h1>
           <Form.Group controlId="formBasicName">
             <Form.Label>Username</Form.Label>
             <Form.Control
@@ -49,6 +48,7 @@ export default function Register() {
               required
             />
           </Form.Group>
+
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control
@@ -73,13 +73,17 @@ export default function Register() {
               required
             />
           </Form.Group>
+
           <Form.Group className="mt-5">
             <Button variant="primary" type="submit" onClick={submitForm}>
               Register
             </Button>
           </Form.Group>
+
           <Link to="/login">Click here to log in</Link>
+
         </Form>
+        </Card>
       </Container>
     </>
   );
