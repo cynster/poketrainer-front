@@ -1,23 +1,32 @@
-import logo from './logo.svg';
 import './App.css';
 
+import { Routes, Route } from "react-router-dom";
+import Navigation from "./components/navigation";
+import Loading from "./components/loading";
+import MessageBox from "./components/messageBox";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { selectAppLoading } from "./store/appState/selectors";
+
+import Home from "./pages/home";
+import AllTrainers from "./pages/allTrainers";
+
 function App() {
+  const isLoading = useSelector(selectAppLoading);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Navigation />
+      <MessageBox />
+      {isLoading ? <Loading /> : null}
+      <Routes>
+        <Route exact path='/' element={<Home />} />
+        <Route exact path='/alltrainers' element={<AllTrainers />} />
+        {/* <Route path='/signup' element={<SignUp />} />
+        <Route path='/login' element={<Login />} />
+        <Route path='/myspace' element={<MySpace />} />
+        <Route path='/spaces/:id' element={<SpaceDetails />} /> */}
+      </Routes>
     </div>
   );
 }
