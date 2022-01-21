@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Container, Form, Col, Row, Button, Card } from "react-bootstrap";
 
-import { register } from "../../store/trainers/actions";
-import { selectToken } from "../../store/trainers/selectors";
+import { register } from "../../store/trainer/actions";
+import { selectToken } from "../../store/trainer/selectors";
 
 export default function Register() {
   const [username, setUsername] = useState("");
@@ -14,12 +14,14 @@ export default function Register() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // const token = useSelector(selectToken);
-  // useEffect(() => {
-  //   if (token !== null) {
-  //     navigate("/");
-  //   }
-  // }, [token, navigate]);
+  // TOKEN
+  // When there is a token, go to the home page
+  const token = useSelector(selectToken);
+  useEffect(() => {
+    if (token !== null) {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   function submitForm(event) {
     event.preventDefault();

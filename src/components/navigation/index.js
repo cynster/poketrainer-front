@@ -3,12 +3,13 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { selectToken } from "../../store/trainers/selectors";
+import { selectToken } from "../../store/trainer/selectors";
 import NavbarItem from "./navbarItem";
 import LoggedIn from "./LoggedIn";
 import LoggedOut from "./LoggedOut";
 
 export default function Navigation() {
+  // Check if there is a token to check if the user is logged in or not
   const token = useSelector(selectToken);
   const loginLogoutControls = token ? <LoggedIn /> : <LoggedOut />;
 
@@ -29,9 +30,6 @@ export default function Navigation() {
         <Nav style={{ width: "100%" }} fill>
           <NavbarItem path="/" linkText="Home" />
           <NavbarItem path="/alltrainers" linkText="All Trainers" />
-          <NavbarItem path="/trainerprofile" linkText="Trainer Profile" />
-          {/* <NavbarItem path="/register" linkText="Register" />
-          <NavbarItem path="/login" linkText="Login" /> */}
           {loginLogoutControls}
         </Nav>
       </Navbar.Collapse>

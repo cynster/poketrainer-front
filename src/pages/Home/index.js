@@ -2,24 +2,24 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Button, Card, Row, Col } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
+import { selectNoTrainers } from "../../store/trainers/selectors";
 
 // import { fetchTrainers } from "../../store/trainers/actions";
 // import { selectTrainers } from "../../store/trainers/selectors";
- import { selectNumberOfTrainers } from "../../store/trainers/selectors";
+ //import { selectNumberOfTrainers } from "../../store/trainers/selectors";
+// import { getCount } from "../../store/trainers/actions";
 // import TrainerCard from "../../components/trainerCard";
 
 export default function Home() {
-  // const dispatch = useDispatch();
+   //const dispatch = useDispatch();
   // const trainers = useSelector(selectTrainers);
 
   // useEffect(() => {
-  //   dispatch(fetchTrainers());
+  //   dispatch(getCount());
   // }, [dispatch]);
 
   //selectors
-  const noTrainers = useSelector(selectNumberOfTrainers);
-  //dispatch
-  //const dispatch = useDispatch();
+  const noTrainers = useSelector(selectNoTrainers);
 
   return (
     <>

@@ -5,15 +5,15 @@ import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect } from "react";
 
 import { selectAppLoading } from "./store/appState/selectors";
-import { getTrainerWithStoredToken } from "./store/trainers/actions";
+import { getTrainerWithStoredToken } from "./store/trainer/actions";
 
 import Navigation from "./components/navigation";
 import Loading from "./components/loading";
 import MessageBox from "./components/messageBox";
 
 import Home from "./pages/Home";
-import AllTrainers from "./pages/allTrainers";
-import TrainerProfile from "./pages/trainerProfile";
+import AllTrainers from "./pages/AllTrainers";
+import TrainerProfile from "./pages/TrainerProfile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 
@@ -33,7 +33,7 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/alltrainers" element={<AllTrainers />} />
-        <Route exact path="/trainerprofile" element={<TrainerProfile />} />
+        <Route exact path="/trainerprofile/:id" element={<TrainerProfile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
       </Routes>

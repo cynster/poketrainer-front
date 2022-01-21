@@ -4,21 +4,23 @@ import { useNavigate, Link } from "react-router-dom";
 
 import { Container, Form, Col, Row, Button, Card } from "react-bootstrap";
 
-import { login } from "../../store/trainers/actions";
-import { selectToken } from "../../store/trainers/selectors";
+import { login } from "../../store/trainer/actions";
+import { selectToken } from "../../store/trainer/selectors";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  // const token = useSelector(selectToken);
-  // useEffect(() => {
-  //   if (token !== null) {
-  //     navigate("/");
-  //   }
-  // }, [token, navigate]);
+  
+  // TOKEN
+  // When there is a token, go to the home page
+  const token = useSelector(selectToken);
+  useEffect(() => {
+    if (token !== null) {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   function submitForm(event) {
     console.log("hi");

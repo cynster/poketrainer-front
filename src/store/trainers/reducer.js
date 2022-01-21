@@ -1,26 +1,23 @@
-import { LOG_OUT, LOGIN_SUCCESS, TOKEN_STILL_VALID } from "./actions";
+import { FETCH_TRAINERS_SUCCESS, TRAINER_DETAILS_FETCHED } from "./actions";
 
 const initialState = {
-  token: localStorage.getItem("token"),
-  username: null,
-  email: null,
+  noTrainers: 0,
+  allTrainers: [],
+  trainerDetails: null,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default (state = initialState, action) => {
-    switch (action.type) {
-      case LOGIN_SUCCESS:
-        localStorage.setItem("token", action.payload.token);
-        return { ...state, ...action.payload };
-  
-      case LOG_OUT:
-        localStorage.removeItem("token");
-        return { ...initialState, token: null };
-  
-      case TOKEN_STILL_VALID:
-        return { ...state, ...action.payload };
-   
-      default:
-        return state;
-    }
-  };
+  switch (action.type) {
+    case FETCH_TRAINERS_SUCCESS:
+      return {
+        ...state,
+        allTrainers: [...state.allTrainers, ...action.payload],
+      };
+    case TRAINER_DETAILS_FETCHED:
+      return { ...state, trainerDetails: { ...action.payload } };
+
+    default:
+      return state;
+  }
+};
