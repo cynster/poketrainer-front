@@ -11,8 +11,9 @@ import Navigation from "./components/navigation";
 import Loading from "./components/loading";
 import MessageBox from "./components/messageBox";
 
-import Home from "./pages/home";
+import Home from "./pages/Home";
 import AllTrainers from "./pages/allTrainers";
+import TrainerProfile from "./pages/trainerProfile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 
@@ -32,10 +33,9 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/alltrainers" element={<AllTrainers />} />
+        <Route exact path="/trainerprofile" element={<TrainerProfile />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-        {/* <Route path='/myspace' element={<MySpace />} />
-        <Route path='/spaces/:id' element={<SpaceDetails />} /> */}
       </Routes>
     </div>
   );

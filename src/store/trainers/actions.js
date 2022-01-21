@@ -106,4 +106,25 @@ export const getTrainerWithStoredToken = () => {
   };
 };
 
+export const getCount = () => {
+  return async (dispatch, getState) => {
+    dispatch(appLoading());
+    try {
+      const response = await axios.post(`${apiUrl}/trainers/count`);
+      dispatch(response.data);
+      dispatch(appDoneLoading());
+    } catch (error) {
+      if (error.response) {
+        // console.log(error.response.data.message);
+        dispatch(setMessage("danger", true, error.response.data.message));
+      } else {
+        // console.log(error.message);
+        dispatch(setMessage("danger", true, error.message));
+      }
+      dispatch(appDoneLoading());
+    }
+  };
+};
+
+
 export const logOut = () => ({ type: LOG_OUT });

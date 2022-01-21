@@ -19,7 +19,7 @@ export default function allTrainers() {
   return (
     <>
       <Container className="mt-5">
-        <Row xs={1} md={5} className="g-4" >
+        <Row xs={1} md={5} className="g-4">
           {Array.from({ length: 10 }).map((_, idx) => (
             <Col>
               <Card>
