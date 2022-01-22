@@ -13,7 +13,7 @@ export default function PokeCard(poke) {
   
   return (
     <Col>
-      <Card className="mt-5" key={poke.id}>
+      <Card className="mt-5" bg="light" key={poke.id}>
         <Card.Body>
           <Card.Title>{poke.party[0]}</Card.Title>
           {/* <Card.Title>{poke.party.secondPokemon}</Card.Title>

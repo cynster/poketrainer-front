@@ -2,31 +2,29 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Button, Card, Row, Col } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
-import { selectNoTrainers } from "../../store/trainers/selectors";
 
-// import { fetchTrainers } from "../../store/trainers/actions";
-// import { selectTrainers } from "../../store/trainers/selectors";
- //import { selectNumberOfTrainers } from "../../store/trainers/selectors";
-// import { getCount } from "../../store/trainers/actions";
-// import TrainerCard from "../../components/trainerCard";
+import { fetchTrainersCount } from "../../store/trainers/actions";
+import { selectTrainersCount } from "../../store/trainers/selectors";
+import { fetchTrainers } from "../../store/trainers/actions";
+import { selectTrainers } from "../../store/trainers/selectors";
 
 export default function Home() {
-   //const dispatch = useDispatch();
-  // const trainers = useSelector(selectTrainers);
-
-  // useEffect(() => {
-  //   dispatch(getCount());
-  // }, [dispatch]);
-
   //selectors
-  const noTrainers = useSelector(selectNoTrainers);
+  const count = ""; //useSelector(selectTrainersCount); // Doesn't work, loop?
+  const latestTrainers = ""; //useSelector(selectTrainers); // Doesn't work, loop?
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchTrainersCount());
+    dispatch(fetchTrainers());
+  }, [dispatch]);
 
   return (
     <>
       <Container style={{ textAlign: "left" }}>
         <Row>
           <Col sm={8}>
-            <Card className="mt-5">
+            <Card className="mt-5" bg="light">
               <Card.Img
                 variant="top"
                 src="https://img.gamewith.net/article/thumbnail/rectangle/1139.jpg"
@@ -34,7 +32,7 @@ export default function Home() {
               <Card.Body>
                 <Card.Title>Welcome to the PokeTrainer website!</Card.Title>
                 <Card.Text>
-                  This websit is built to learn from. It is built as a portfolio
+                  This website is built to learn from. It is built as a portfolio
                   of a study.
                 </Card.Text>
                 <Card.Text>
@@ -57,14 +55,18 @@ export default function Home() {
           </Col>
 
           <Col sm={4}>
-            <Card className="mt-5">
+            <Card className="mt-5" bg="light">
               <Card.Header>Latest trainers</Card.Header>
-              <Card.Body style={{ textAlign: "center" }}>...</Card.Body>
+              <Card.Body style={{ textAlign: "center" }}>
+                {latestTrainers ? latestTrainers : "unknown"}
+              </Card.Body>
             </Card>
 
-            <Card className="mt-5">
+            <Card className="mt-5" bg="light">
               <Card.Header>Total number of trainers</Card.Header>
-              <Card.Body style={{ textAlign: "center" }}>{noTrainers}</Card.Body>
+              <Card.Body style={{ textAlign: "center" }}>
+                {count ? count : "unknown"}
+              </Card.Body>
             </Card>
           </Col>
         </Row>

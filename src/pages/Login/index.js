@@ -23,7 +23,6 @@ export default function Login() {
   }, [token, navigate]);
 
   function submitForm(event) {
-    console.log("hi");
     event.preventDefault();
 
     dispatch(login(email, password));
@@ -35,7 +34,7 @@ export default function Login() {
   return (
     <>
       <Container style={{ textAlign: "left" }}>
-        <Card className="mt-5">
+        <Card className="mt-5" bg="light">
           <Card.Header>Login</Card.Header>
           <Card.Body>
             <Row>

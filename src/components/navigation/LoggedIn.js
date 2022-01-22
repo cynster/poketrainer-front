@@ -11,10 +11,11 @@ import { selectTrainer } from "../../store/trainer/selectors";
 export default function LoggedIn() {
   const dispatch = useDispatch();
   const trainer = useSelector(selectTrainer);
+  const trainerProfile= "/trainerprofile/"+ trainer.id;
 
   return (
     <>
-      <NavbarItem path="/trainerprofile" linkText="My Trainer Profile" />
+      <NavbarItem path={trainerProfile} linkText="My Trainer Profile" />
       <Nav.Item style={{ padding: ".5rem 1rem" }}>
         Logged in as: {trainer.username}
       </Nav.Item>

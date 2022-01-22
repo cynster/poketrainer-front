@@ -1,7 +1,11 @@
-import { FETCH_TRAINERS_SUCCESS, TRAINER_DETAILS_FETCHED } from "./actions";
+import {
+  FETCH_TRAINERS_SUCCESS,
+  TRAINER_DETAILS_FETCHED,
+  FETCH_TRAINERS_COUNT_SUCCESS,
+} from "./actions";
 
 const initialState = {
-  noTrainers: 0,
+  trainersCount: null,
   allTrainers: [],
   trainerDetails: null,
 };
@@ -16,6 +20,9 @@ export default (state = initialState, action) => {
       };
     case TRAINER_DETAILS_FETCHED:
       return { ...state, trainerDetails: { ...action.payload } };
+
+    case FETCH_TRAINERS_COUNT_SUCCESS:
+      return { ...state, trainersCount: { ...action.payload } };
 
     default:
       return state;

@@ -36,7 +36,7 @@ export default function Register() {
   return (
     <>
       <Container style={{ textAlign: "left" }}>
-        <Card className="mt-5">
+        <Card className="mt-5" bg="light">
           <Card.Header>Register</Card.Header>
           <Card.Body>
             <Row>

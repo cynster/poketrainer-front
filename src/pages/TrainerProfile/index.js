@@ -23,13 +23,22 @@ export default function TrainerProfile() {
 
   if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
 
+  const mainColor = trainer.mainColor ? trainer.mainColor : "light";
+  const secondaryColor = trainer.secondaryColor ? trainer.secondaryColor : "";
+  const text = mainColor === "light" ? "dark" : "white";
+
   return (
     <>
       <Container style={{ textAlign: "left" }}>
         <Row>
           <Col sm={3}>
             {/* TRAINER CARD */}
-            <Card className="mt-5">
+            <Card
+              className="mt-5"
+              bg={mainColor}
+              border={secondaryColor}
+              text={text}
+            >
               <Card.Img
                 variant="top"
                 src={
@@ -71,7 +80,12 @@ export default function TrainerProfile() {
 
           <Col sm={9}>
             {/* PARTY CARD */}
-            <Card className="mt-5">
+            <Card
+              className="mt-5"
+              bg={mainColor}
+              border={secondaryColor}
+              text={text}
+            >
               <Card.Header>
                 Current Party -{" "}
                 {trainer.parties[0]
@@ -82,7 +96,7 @@ export default function TrainerProfile() {
                 {trainer.parties[0] ? (
                   <Row xs={1} md={3}>
                     <Col>
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -95,7 +109,7 @@ export default function TrainerProfile() {
                       </Card>
                     </Col>
                     <Col>
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -108,7 +122,7 @@ export default function TrainerProfile() {
                       </Card>
                     </Col>
                     <Col>
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -121,7 +135,7 @@ export default function TrainerProfile() {
                       </Card>
                     </Col>
                     <Col className="mt-3">
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -134,7 +148,7 @@ export default function TrainerProfile() {
                       </Card>
                     </Col>
                     <Col className="mt-3">
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -147,7 +161,7 @@ export default function TrainerProfile() {
                       </Card>
                     </Col>
                     <Col className="mt-3">
-                      <Card className="bg-light text-black">
+                      <Card bg={mainColor} text={text}>
                         <Card.Img
                           src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
                           alt="Card image"
@@ -167,7 +181,12 @@ export default function TrainerProfile() {
             </Card>
 
             {/* BADGES CARD */}
-            <Card className="mt-5">
+            <Card
+              className="mt-5"
+              bg={mainColor}
+              border={secondaryColor}
+              text={text}
+            >
               <Card.Header>Badges</Card.Header>
               <Card.Body style={{ textAlign: "center" }}>
                 ... 8 badgeCards

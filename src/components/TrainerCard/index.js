@@ -13,7 +13,7 @@ export default function TrainerCard(props) {
 
   return (
     <Col>
-      <Card className="mt-5" key={props.id}>
+      <Card className="mt-5" bg="light" key={props.id}>
         <Card.Img
           variant="top"
           src={
