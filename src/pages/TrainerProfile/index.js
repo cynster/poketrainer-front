@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import moment from "moment";
 
-import { Container, Card, Row, Col } from "react-bootstrap";
+import { Container, Card, Row, Col, Button } from "react-bootstrap";
 
 //import { useNavigate, Link } from "react-router-dom";
 import Loading from "../../components/loading";
@@ -17,6 +17,8 @@ export default function TrainerProfile() {
   const trainer = useSelector(selectTrainerDetails);
   const dispatch = useDispatch();
 
+  const [editMode, setEditMode] = useState(false);
+
   useEffect(() => {
     dispatch(fetchTrainerById(id));
   }, [dispatch, id]);
@@ -26,6 +28,12 @@ export default function TrainerProfile() {
   const mainColor = trainer.mainColor ? trainer.mainColor : "light";
   const secondaryColor = trainer.secondaryColor ? trainer.secondaryColor : "";
   const text = mainColor === "light" ? "dark" : "white";
+
+  const displayEditButton = id === trainer.trainerId;
+
+  function firstLetterUpperCase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <>
@@ -48,7 +56,7 @@ export default function TrainerProfile() {
                 }
               />
               <Card.Body>
-                <Card.Title>Trainer {trainer.username}</Card.Title>
+                <Card.Title>Trainer {firstLetterUpperCase(trainer.username)}</Card.Title>
                 <Card.Text>
                   Joined on {moment(trainer.createdAt).format("LL")}
                 </Card.Text>
@@ -196,7 +204,15 @@ export default function TrainerProfile() {
         </Row>
       </Container>
 
-      <Container style={{ textAlign: "left" }}></Container>
+      <Container>
+        {displayEditButton ? (
+          <Card>
+            <Button onClick={() => setEditMode(!editMode)}>
+              {editMode ? "Close" : "Edit my trainer profile"}
+            </Button>
+          </Card>
+        ) : "no edit button"}
+      </Container>
     </>
   );
 }

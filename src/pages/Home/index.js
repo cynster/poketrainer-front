@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, Button, Card, Row, Col } from "react-bootstrap";
 import { useNavigate, Link } from "react-router-dom";
 
+import moment from "moment";
 import { fetchTrainersCount } from "../../store/trainers/actions";
 import { selectTrainersCount } from "../../store/trainers/selectors";
 import { fetchTrainers } from "../../store/trainers/actions";
@@ -10,14 +11,21 @@ import { selectTrainers } from "../../store/trainers/selectors";
 
 export default function Home() {
   //selectors
-  const count = ""; //useSelector(selectTrainersCount); // Doesn't work, loop?
-  const latestTrainers = ""; //useSelector(selectTrainers); // Doesn't work, loop?
+  const count = useSelector(selectTrainersCount);
+  console.log("count=" + count);
+
+  const latestTrainers = useSelector(selectTrainers);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
-    dispatch(fetchTrainersCount());
     dispatch(fetchTrainers());
+    //dispatch(fetchTrainersCount()); // Doesn't work, loop?
   }, [dispatch]);
+
+  function firstLetterUpperCase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   return (
     <>
@@ -32,8 +40,8 @@ export default function Home() {
               <Card.Body>
                 <Card.Title>Welcome to the PokeTrainer website!</Card.Title>
                 <Card.Text>
-                  This website is built to learn from. It is built as a portfolio
-                  of a study.
+                  This website is built to learn from. It is built as a
+                  portfolio of a study.
                 </Card.Text>
                 <Card.Text>
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -58,14 +66,45 @@ export default function Home() {
             <Card className="mt-5" bg="light">
               <Card.Header>Latest trainers</Card.Header>
               <Card.Body style={{ textAlign: "center" }}>
-                {latestTrainers ? latestTrainers : "unknown"}
+                {/* Workaround until app/userbase gets too big, 
+                now shows all trainers, not limited to 5, 
+                needs its own endpoint */}
+                {latestTrainers
+                  ? latestTrainers.map((trainer) => (
+                      <Row key={trainer.id}>
+                        <Col sm={4}>
+                          <img
+                            src={
+                              trainer.image
+                                ? trainer.image
+                                : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
+                            }
+                            alt="Trainer"
+                            width="50"
+                            height="50"
+                          />
+                        </Col>
+                        <Col sm={6}>
+                          {firstLetterUpperCase(trainer.username)}
+                          <br></br>
+                          <i className="text-muted">
+                            {moment(trainer.createdAt)
+                              .startOf("hour")
+                              .fromNow()}
+                          </i>
+                        </Col>
+                        <hr />
+                      </Row>
+                    ))
+                  : "unknown"}
               </Card.Body>
             </Card>
 
             <Card className="mt-5" bg="light">
               <Card.Header>Total number of trainers</Card.Header>
               <Card.Body style={{ textAlign: "center" }}>
-                {count ? count : "unknown"}
+                {/* Workaround until app/userbase gets too big, own endpoint not working */}
+                {count ? count : latestTrainers.length}
               </Card.Body>
             </Card>
           </Col>

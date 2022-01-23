@@ -5,9 +5,9 @@ import {
 } from "./actions";
 
 const initialState = {
-  trainersCount: null,
   allTrainers: [],
   trainerDetails: null,
+  trainersCount: null,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export

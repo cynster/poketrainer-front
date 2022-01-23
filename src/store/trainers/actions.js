@@ -34,7 +34,7 @@ export const fetchTrainersSuccess = (trainers) => ({
           `${apiUrl}/trainers?limit=${DEFAULT_PAGINATION_LIMIT}&offset=${trainersCount}`
         );
   
-        // console.log(response.data);
+        
         dispatch(fetchTrainersSuccess(response.data.trainers.rows));
       } catch (e) {
         console.log(e.message);
