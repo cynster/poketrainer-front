@@ -20,7 +20,7 @@ export const fetchPokemonSuccess = (pokemon) => ({
         const response = await axios.get(
           `${apiUrl}/pokemon/${id}`
         );
-        dispatch(fetchPokemonSuccess(response.data.pokemon));
+        dispatch(fetchPokemonSuccess(response.data));
       } catch (e) {
         console.log(e.message);
       }

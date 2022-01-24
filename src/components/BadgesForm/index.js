@@ -6,56 +6,56 @@ export default function BadgesForm() {
     <Card.Body>
       <Form>
       <Row xs={1} md={4}>
-      <Form.Group className="mt-3">
+      <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 1`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 2`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 3`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 4`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 5`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 6`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}
             label={`Badge 7`}
           />
         </Form.Group>
-        <Form.Group className="mt-3">
+        <Form.Group className="mt-3" controlId="formBasicCheckbox">
           <Form.Check
             //type={type}
             //id={`default-${type}`}

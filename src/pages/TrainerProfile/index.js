@@ -8,8 +8,8 @@ import { Container, Card, Row, Col, Button } from "react-bootstrap";
 // Components
 import Loading from "../../components/loading";
 import BadgesForm from "../../components/BadgesForm";
-import PartyForm from "../../components/PartyForm"
-import BuddyForm from "../../components/BuddyForm";
+import PartyForm from "../../components/PartyForm";
+import MainForm from "../../components/MainForm";
 //import PokeCard from "../../components/PokeCard";
 //import BadgesCard from "../../components/BadgesCard";
 
@@ -37,7 +37,15 @@ export default function TrainerProfile() {
 
   if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
 
-  //
+  // Make pokemonparty array from Object to map only pokemon, if trainer has party
+  const party = trainer.parties[0]
+    ? Object.values(trainer.parties[0]).slice(0, 6)
+    : "";
+
+  // Badges
+  const badges = trainer.badges ? trainer.badges : "Trainer has no badges.";
+
+  // Setting profile colors
   const mainColor = trainer.mainColor ? trainer.mainColor : "light";
   const secondaryColor = trainer.secondaryColor ? trainer.secondaryColor : "";
   const text = mainColor === "light" ? "dark" : "white";
@@ -45,6 +53,7 @@ export default function TrainerProfile() {
   // Show edit button when logged in trainer matches the TrainerdetailsID
   const displayEditButton = trainer.id === user.id;
 
+  // Makes the first character of the string upper case
   function firstLetterUpperCase(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -54,7 +63,7 @@ export default function TrainerProfile() {
       <Container style={{ textAlign: "left" }}>
         <Row>
           <Col sm={3}>
-            {/* TRAINER CARD */}
+            {/* TRAINER CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
             <Card
               className="mt-5"
               bg={mainColor}
@@ -64,66 +73,75 @@ export default function TrainerProfile() {
               {displayEditButton ? (
                 <Card>
                   <Button onClick={() => setEditMode(!editMode)}>
-                    {editMode ? "Save" : "Edit profile"}
+                    {editMode ? "Done" : "Edit profile"}
                   </Button>
                 </Card>
               ) : (
                 ""
               )}
-              <Card.Img
-                variant="top"
-                src={
-                  trainer.image
-                    ? trainer.image
-                    : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
-                }
-              />
-              <Card.Body>
-                <Card.Title>
-                  Trainer {firstLetterUpperCase(trainer.username)}
-                </Card.Title>
-                <Card.Text>
-                  Joined on {moment(trainer.createdAt).format("LL")}
-                </Card.Text>
-                <Card.Text>
-                  Last updated{" "}
-                  {moment(trainer.createdAt).startOf("hour").fromNow()}
-                </Card.Text>
-                <hr />
-                <Card.Title>Buddy</Card.Title>
-                {!editMode && (
-                  <div>
+
+              {!editMode && (
+                <div>
+                  <Card.Img
+                    variant="top"
+                    src={
+                      trainer.image
+                        ? trainer.image
+                        : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
+                    }
+                  />
+                  <Card.Body>
+                    <Card.Title>
+                      Trainer {firstLetterUpperCase(trainer.username)}
+                    </Card.Title>
                     <Card.Text>
-                      <b>[IMAGE]</b>
+                      Joined on {moment(trainer.createdAt).format("LL")}
                     </Card.Text>
                     <Card.Text>
-                      <b>PokemonName</b>
+                      Last updated{" "}
+                      {moment(trainer.createdAt).startOf("hour").fromNow()}
                     </Card.Text>
-                    <Card.Text>
-                      <b>Number:</b> {trainer.buddy ? trainer.buddy : "None"}
-                    </Card.Text>
-                    <Card.Text>
-                      <b>Type:</b>
-                    </Card.Text>
-                    <Card.Text>
-                      <b>Weight (hg):</b>
-                    </Card.Text>
-                    <Card.Text>
-                      <b>Height (dm):</b>
-                    </Card.Text>
-                  </div>
-                )}
-                {editMode && (
-                  <div>
-                    <BuddyForm/>
-                  </div>
-                )}
-              </Card.Body>
+                    <hr />
+                    <Card.Title>Buddy</Card.Title>
+                    {trainer.buddy ? (
+                      <div>
+                        <Card.Text>
+                          <b>[IMAGE]</b>
+                        </Card.Text>
+                        <Card.Text>
+                          <b>PokemonName</b>
+                        </Card.Text>
+                        <Card.Text>
+                          <b>Number:</b> {trainer.buddy}
+                        </Card.Text>
+                        <Card.Text>
+                          <b>Type:</b>
+                        </Card.Text>
+                        <Card.Text>
+                          <b>Weight (hg):</b>
+                        </Card.Text>
+                        <Card.Text>
+                          <b>Height (dm):</b>
+                        </Card.Text>
+                      </div>
+                    ) : (
+                      "Trainer has no buddy."
+                    )}
+                  </Card.Body>
+                </div>
+              )}
+              {editMode && (
+                <div>
+                  <Card.Body>
+                    <MainForm />
+                  </Card.Body>
+                </div>
+              )}
             </Card>
           </Col>
 
           <Col sm={9}>
-            {/* PARTY CARD */}
+            {/* PARTY CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
             {editMode && (
               <Card
                 className="mt-5"
@@ -152,84 +170,23 @@ export default function TrainerProfile() {
                 <Card.Body style={{ textAlign: "center" }}>
                   {trainer.parties[0] ? (
                     <Row xs={1} md={3}>
-                      <Col>
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].firstPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
-                      <Col>
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].secondPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
-                      <Col>
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].thirdPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
-                      <Col className="mt-3">
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].fourthPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
-                      <Col className="mt-3">
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].fifthPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
-                      <Col className="mt-3">
-                        <Card bg={mainColor} text={text}>
-                          <Card.Img
-                            src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
-                            alt="Card image"
-                          />
-                          <Card.ImgOverlay>
-                            <Card.Title>
-                              {trainer.parties[0].sixthPokemon}
-                            </Card.Title>
-                          </Card.ImgOverlay>
-                        </Card>
-                      </Col>
+                      {party.map((pokemon) => {
+                        return (
+                          <Col>
+                            <Card bg={mainColor} text={text}>
+                              <Card.Img
+                                src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
+                                alt="Pokemon image"
+                              />
+                              <Card.ImgOverlay>
+                                <Card.Title style={{ textAlign: "center" }}>
+                                  {pokemon}
+                                </Card.Title>
+                              </Card.ImgOverlay>
+                            </Card>
+                          </Col>
+                        );
+                      })}
                     </Row>
                   ) : (
                     "Trainer has no party."
@@ -238,8 +195,7 @@ export default function TrainerProfile() {
               </Card>
             )}
 
-            {/* BADGES CARD */}
-
+            {/* BADGES CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
             {!editMode && (
               <Card
                 className="mt-5"
@@ -249,7 +205,7 @@ export default function TrainerProfile() {
               >
                 <Card.Header>Current Badges</Card.Header>
                 <Card.Body style={{ textAlign: "center" }}>
-                  ... 8 badgeCards
+                  {badges}
                 </Card.Body>
               </Card>
             )}
