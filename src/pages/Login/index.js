@@ -71,7 +71,7 @@ export default function Login() {
                       Log in
                     </Button>
                     {" or "}
-                    <Link to="/register">click here to sign up</Link>
+                    <Link to="/register">click here to register as a trainer</Link>
                   </Form.Group>
                 </Form>
               </Col>

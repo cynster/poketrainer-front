@@ -6,23 +6,23 @@ import { useNavigate, Link } from "react-router-dom";
 import moment from "moment";
 import { fetchTrainersCount } from "../../store/trainers/actions";
 import { selectTrainersCount } from "../../store/trainers/selectors";
-import { fetchTrainers } from "../../store/trainers/actions";
-import { selectTrainers } from "../../store/trainers/selectors";
+
+import { selectLatestFiveTrainers } from "../../store/trainers/selectors";
+import { fetchLatestFiveTrainers } from "../../store/trainers/actions";
 
 export default function Home() {
-  //selectors
+  //Selectors
   const count = useSelector(selectTrainersCount);
-  console.log("count=" + count);
+  const LatestFiveTrainers = useSelector(selectLatestFiveTrainers);
 
-  const latestTrainers = useSelector(selectTrainers);
-
+  //Dispatch actions
   const dispatch = useDispatch();
-
   useEffect(() => {
-    dispatch(fetchTrainers());
-    //dispatch(fetchTrainersCount()); // Doesn't work, loop?
+    dispatch(fetchLatestFiveTrainers());
+    dispatch(fetchTrainersCount());
   }, [dispatch]);
 
+  //First letter of a string to uppercase.
   function firstLetterUpperCase(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
@@ -66,11 +66,8 @@ export default function Home() {
             <Card className="mt-5" bg="light">
               <Card.Header>Latest trainers</Card.Header>
               <Card.Body style={{ textAlign: "center" }}>
-                {/* Workaround until app/userbase gets too big, 
-                now shows all trainers, not limited to 5, 
-                needs its own endpoint */}
-                {latestTrainers
-                  ? latestTrainers.map((trainer) => (
+                {LatestFiveTrainers.length
+                  ? LatestFiveTrainers.map((trainer) => (
                       <Row key={trainer.id}>
                         <Col sm={4}>
                           <img
@@ -103,8 +100,7 @@ export default function Home() {
             <Card className="mt-5" bg="light">
               <Card.Header>Total number of trainers</Card.Header>
               <Card.Body style={{ textAlign: "center" }}>
-                {/* Workaround until app/userbase gets too big, own endpoint not working */}
-                {count ? count : latestTrainers.length}
+                {count ? count : "unknown"}
               </Card.Body>
             </Card>
           </Col>

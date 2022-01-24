@@ -17,9 +17,15 @@ import TrainerProfile from "./pages/TrainerProfile";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 
+import { selectAllStates } from "./store/trainer/selectors";
+
 function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector(selectAppLoading);
+
+  // Because my Redux Devtools is broken, can be removed
+  const allStates = useSelector(selectAllStates)
+  console.log("All states:", allStates)
 
   useEffect(() => {
     dispatch(getTrainerWithStoredToken());
