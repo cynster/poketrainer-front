@@ -1,5 +1,4 @@
 <img align="left" alt="" src="https://s2.coinmarketcap.com/static/img/coins/200x200/8303.png" width="30" height="30" />
-
 # Poketrainer!
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
