@@ -1,4 +1,4 @@
-# Poketrainer!![Pokeball](https://www.pinclipart.com/picdir/middle/300-3009374_pokemon-go-clipart-pokeball-png-download.png)
+# Poketrainer!
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 To make this application functional, you'll need to run the [Poketrainer-back](https://github.com/cynster/poketrainer-back)end as well.
