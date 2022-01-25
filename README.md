@@ -1,4 +1,4 @@
-<img src="https://s2.coinmarketcap.com/static/img/coins/200x200/8303.png" width="30" height="30" /> # Poketrainer! <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/8303.png" width="30" height="30" />
+# Poketrainer! <img src="https://s2.coinmarketcap.com/static/img/coins/200x200/8303.png" width="30" height="30" />
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 To make this application functional, you'll need to run the [Poketrainer-back](https://github.com/cynster/poketrainer-back)end as well.
