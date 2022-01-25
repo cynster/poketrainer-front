@@ -35,7 +35,7 @@ export default function TrainerCard(trainer) {
             Since {moment(trainer.created).format("LL")}
           </Card.Text>
           <Card.Text>
-            {trainer.buddy ? "Buddy: " + trainer.buddy : "Buddy: ✗"}
+            {trainer.buddy ? "Buddy: ✓" : "Buddy: ✗"}
           </Card.Text>
           <Card.Text>{party()}</Card.Text>
           <Card.Text>

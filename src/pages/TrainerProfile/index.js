@@ -13,34 +13,63 @@ import MainForm from "../../components/MainForm";
 //import PokeCard from "../../components/PokeCard";
 //import BadgesCard from "../../components/BadgesCard";
 
-import { fetchTrainerById } from "../../store/trainers/actions";
 import { selectTrainerDetails } from "../../store/trainers/selectors";
 import { selectTrainer } from "../../store/trainer/selectors";
-
 import { selectPokemon } from "../../store/pokemon/selectors";
+import { selectBuddy } from "../../store/pokemon/selectors";
+import { fetchBuddyById } from "../../store/pokemon/actions";
 import { fetchPokemonById } from "../../store/pokemon/actions";
+import { fetchTrainerById } from "../../store/trainers/actions";
 
 export default function TrainerProfile() {
+  const dispatch = useDispatch();
   const { id } = useParams();
+
   const trainer = useSelector(selectTrainerDetails);
   const user = useSelector(selectTrainer);
-  const dispatch = useDispatch();
-
+  const pokemons = useSelector(selectPokemon);
+  const buddy = useSelector(selectBuddy);
   const [editMode, setEditMode] = useState(false);
+  const [party, setParty] = useState([]);
 
-  //const buddyData = useSelector(selectPokemon());
+  const getPokemonById = (pokemonId) => {
+    const pokemon = pokemons.find((pokemon) => {
+      return pokemon.id === pokemonId;
+    });
+    return pokemon ? pokemon : { name: "", image: "" };
+  };
+
+  // Makes the first character of the string upper case
+  function firstLetterUpperCase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   useEffect(() => {
     dispatch(fetchTrainerById(id));
-    //dispatch(fetchPokemonById(trainer.buddy))
   }, [dispatch, id]);
 
-  if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
+  useEffect(() => {
+    if (trainer && trainer.parties[0]) {
+      setParty(Object.values(trainer.parties[0]).slice(0, 6));
+    }
+  }, [trainer]);
 
-  // Make pokemonparty array from Object to map only pokemon, if trainer has party
-  const party = trainer.parties[0]
-    ? Object.values(trainer.parties[0]).slice(0, 6)
-    : "";
+  useEffect(() => {
+    if (trainer) {
+      dispatch(fetchBuddyById(trainer.buddy));
+    }
+  }, [dispatch, trainer]);
+
+  useEffect(() => {
+    if (party) {
+      party.forEach((pokemonId) => {
+        dispatch(fetchPokemonById(pokemonId));
+      });
+    }
+  }, [dispatch, party]);
+
+  // Show loading when trainer does not exist
+  if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
 
   // Badges
   const badges = trainer.badges ? trainer.badges : "Trainer has no badges.";
@@ -53,10 +82,7 @@ export default function TrainerProfile() {
   // Show edit button when logged in trainer matches the TrainerdetailsID
   const displayEditButton = trainer.id === user.id;
 
-  // Makes the first character of the string upper case
-  function firstLetterUpperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
+  
 
   return (
     <>
@@ -106,22 +132,23 @@ export default function TrainerProfile() {
                     {trainer.buddy ? (
                       <div>
                         <Card.Text>
-                          <b>[IMAGE]</b>
+                          <b>{buddy.name}</b>
+                        </Card.Text>
+                        <Card.Img variant="top" src={buddy.image} />
+                        <Card.Text>
+                          <b>Number:</b> {buddy.id}
                         </Card.Text>
                         <Card.Text>
-                          <b>PokemonName</b>
+                          <b>Type: </b> {buddy.type1}
+                          {buddy.type2 ? ` / ${buddy.type2}` : ""}
                         </Card.Text>
                         <Card.Text>
-                          <b>Number:</b> {trainer.buddy}
+                          <b>Weight: </b>
+                          {buddy.weight} hg
                         </Card.Text>
                         <Card.Text>
-                          <b>Type:</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Weight (hg):</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Height (dm):</b>
+                          <b>Height: </b>
+                          {buddy.height} dm
                         </Card.Text>
                       </div>
                     ) : (
@@ -162,25 +189,25 @@ export default function TrainerProfile() {
                 text={text}
               >
                 <Card.Header>
-                  Current Party -{" "}
+                  Current Party {" "}
                   {trainer.parties[0]
-                    ? trainer.parties[0].trainersParties.name
-                    : "None"}
+                    ? `- ${trainer.parties[0].trainersParties.name}`
+                    : ""}
                 </Card.Header>
                 <Card.Body style={{ textAlign: "center" }}>
                   {trainer.parties[0] ? (
                     <Row xs={1} md={3}>
-                      {party.map((pokemon) => {
+                      {party.map((pokemonId) => {
                         return (
-                          <Col>
+                          <Col key={pokemonId}>
                             <Card bg={mainColor} text={text}>
                               <Card.Img
-                                src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
+                                src={getPokemonById(pokemonId).image}
                                 alt="Pokemon image"
                               />
                               <Card.ImgOverlay>
                                 <Card.Title style={{ textAlign: "center" }}>
-                                  {pokemon}
+                                  {getPokemonById(pokemonId).name}
                                 </Card.Title>
                               </Card.ImgOverlay>
                             </Card>
@@ -204,9 +231,7 @@ export default function TrainerProfile() {
                 text={text}
               >
                 <Card.Header>Current Badges</Card.Header>
-                <Card.Body style={{ textAlign: "center" }}>
-                  {badges}
-                </Card.Body>
+                <Card.Body style={{ textAlign: "center" }}>{badges}</Card.Body>
               </Card>
             )}
 
