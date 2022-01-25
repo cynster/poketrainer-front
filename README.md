@@ -1,6 +1,7 @@
 # Poketrainer!
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+To make this application functional, you'll need to run the [Poketrainer-back](https://github.com/cynster/poketrainer-back) as well.
 
 ## Available Scripts
 
