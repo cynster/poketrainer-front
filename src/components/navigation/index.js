@@ -11,7 +11,11 @@ import pokeball from "../../images/pokeball.png";
 export default function Navigation(props) {
   // Check if there is a token to check if the user is logged in or not
   const token = useSelector(selectToken);
-  const loginLogoutControls = token ? <LoggedIn /> : <LoggedOut />;
+  const loginLogoutControls = token ? (
+    <LoggedIn darkMode={props.darkMode} />
+  ) : (
+    <LoggedOut />
+  );
 
   return (
     <Navbar

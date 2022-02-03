@@ -27,6 +27,12 @@ export default function TrainerProfile() {
   const dispatch = useDispatch();
   const { id } = useParams();
 
+  //First letter of a string to uppercase.
+  function firstLetterUpperCase(string) {
+    const name = string ? string : "";
+    return name.charAt(0).toUpperCase() + name.slice(1);
+  }
+
   const trainer = useSelector(selectTrainerDetails);
   const user = useSelector(selectTrainer);
   const pokemons = useSelector(selectPokemon);
@@ -146,14 +152,14 @@ export default function TrainerProfile() {
                       {party.map((pokemonId) => {
                         return (
                           <Col key={pokemonId}>
-                            <Card bg={mainColor} text={text}>
+                            <Card bg={mainColor} text={text} style={{marginBottom:"15px"}}>
                               <Card.Img
                                 src={getPokemonById(pokemonId).image}
                                 alt="Pokemon image"
                               />
                               <Card.ImgOverlay>
                                 <Card.Title style={{ textAlign: "center" }}>
-                                  {getPokemonById(pokemonId).name}
+                                  {firstLetterUpperCase(getPokemonById(pokemonId).name)}
                                 </Card.Title>
                               </Card.ImgOverlay>
                             </Card>
