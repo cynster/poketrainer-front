@@ -2,24 +2,26 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Card, Row, Col, Button } from "react-bootstrap";
+import { Container, Card, Row, Col, Button, Badge } from "react-bootstrap";
 //import { useNavigate, Link } from "react-router-dom";
 
 // Components
 import Loading from "../../components/loading";
-import BadgesForm from "../../components/BadgesForm";
-import PartyForm from "../../components/PartyForm";
-import MainForm from "../../components/MainForm";
+import BadgesForm from "../../components/profile/BadgesForm";
+import PartyForm from "../../components/profile/PartyForm";
+import MainForm from "../../components/profile/MainForm";
+import MainCard from "../../components/profile/MainCard";
 //import PokeCard from "../../components/PokeCard";
-//import BadgesCard from "../../components/BadgesCard";
+import BadgesCard from "../../components/profile/BadgesCard";
 
 import { selectTrainerDetails } from "../../store/trainers/selectors";
 import { selectTrainer } from "../../store/trainer/selectors";
 import { selectPokemon } from "../../store/pokemon/selectors";
-import { selectBuddy } from "../../store/pokemon/selectors";
-import { fetchBuddyById } from "../../store/pokemon/actions";
-import { fetchPokemonById } from "../../store/pokemon/actions";
+import { selectAllPokemonNames } from "../../store/pokemon/selectors";
+
+import { fetchPokemonById, fetchBuddyById } from "../../store/pokemon/actions";
 import { fetchTrainerById } from "../../store/trainers/actions";
+import { fetchAllPokemonNames } from "../../store/pokemon/actions";
 
 export default function TrainerProfile() {
   const dispatch = useDispatch();
@@ -28,7 +30,8 @@ export default function TrainerProfile() {
   const trainer = useSelector(selectTrainerDetails);
   const user = useSelector(selectTrainer);
   const pokemons = useSelector(selectPokemon);
-  const buddy = useSelector(selectBuddy);
+  const allPokemonNames = useSelector(selectAllPokemonNames);
+
   const [editMode, setEditMode] = useState(false);
   const [party, setParty] = useState([]);
 
@@ -39,27 +42,26 @@ export default function TrainerProfile() {
     return pokemon ? pokemon : { name: "", image: "" };
   };
 
-  // Makes the first character of the string upper case
-  function firstLetterUpperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
+  // Fetching Trainerdata
   useEffect(() => {
     dispatch(fetchTrainerById(id));
   }, [dispatch, id]);
 
+  //Slicing Party if there is a Trainer and the trainer has a party
   useEffect(() => {
     if (trainer && trainer.parties[0]) {
       setParty(Object.values(trainer.parties[0]).slice(0, 6));
     }
   }, [trainer]);
 
+  // Fetching Pokemondata of the buddy if there is a buddy
   useEffect(() => {
     if (trainer) {
       dispatch(fetchBuddyById(trainer.buddy));
     }
   }, [dispatch, trainer]);
 
+  // Fetching Pokemondata of the party Pokemon if there is a party
   useEffect(() => {
     if (party) {
       party.forEach((pokemonId) => {
@@ -68,11 +70,14 @@ export default function TrainerProfile() {
     }
   }, [dispatch, party]);
 
+  // Fetching all names of supported Pokemon
+  useEffect(() => {
+    const supportedPokemon = 151;
+    dispatch(fetchAllPokemonNames(supportedPokemon));
+  }, [dispatch]);
+
   // Show loading when trainer does not exist
   if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
-
-  // Badges
-  const badges = trainer.badges ? trainer.badges : "Trainer has no badges.";
 
   // Setting profile colors
   const mainColor = trainer.mainColor ? trainer.mainColor : "light";
@@ -82,14 +87,13 @@ export default function TrainerProfile() {
   // Show edit button when logged in trainer matches the TrainerdetailsID
   const displayEditButton = trainer.id === user.id;
 
-  
-
   return (
     <>
       <Container style={{ textAlign: "left" }}>
         <Row>
           <Col sm={3}>
-            {/* TRAINER CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* TRAINER CARD */}
+
             <Card
               className="mt-5"
               bg={mainColor}
@@ -99,76 +103,19 @@ export default function TrainerProfile() {
               {displayEditButton ? (
                 <Card>
                   <Button onClick={() => setEditMode(!editMode)}>
-                    {editMode ? "Done" : "Edit profile"}
+                    {editMode ? "Cancel" : "Edit profile"}
                   </Button>
                 </Card>
               ) : (
                 ""
               )}
-
-              {!editMode && (
-                <div>
-                  <Card.Img
-                    variant="top"
-                    src={
-                      trainer.image
-                        ? trainer.image
-                        : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
-                    }
-                  />
-                  <Card.Body>
-                    <Card.Title>
-                      Trainer {firstLetterUpperCase(trainer.username)}
-                    </Card.Title>
-                    <Card.Text>
-                      Joined on {moment(trainer.createdAt).format("LL")}
-                    </Card.Text>
-                    <Card.Text>
-                      Last updated{" "}
-                      {moment(trainer.createdAt).startOf("hour").fromNow()}
-                    </Card.Text>
-                    <hr />
-                    <Card.Title>Buddy</Card.Title>
-                    {trainer.buddy ? (
-                      <div>
-                        <Card.Text>
-                          <b>{buddy.name}</b>
-                        </Card.Text>
-                        <Card.Img variant="top" src={buddy.image} />
-                        <Card.Text>
-                          <b>Number:</b> {buddy.id}
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Type: </b> {buddy.type1}
-                          {buddy.type2 ? ` / ${buddy.type2}` : ""}
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Weight: </b>
-                          {buddy.weight} hg
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Height: </b>
-                          {buddy.height} dm
-                        </Card.Text>
-                      </div>
-                    ) : (
-                      "Trainer has no buddy."
-                    )}
-                  </Card.Body>
-                </div>
-              )}
-              {editMode && (
-                <div>
-                  <Card.Body>
-                    <MainForm />
-                  </Card.Body>
-                </div>
-              )}
+              {!editMode && <MainCard />}
+              {editMode && <MainForm allPokemonNames={allPokemonNames} />}
             </Card>
           </Col>
 
           <Col sm={9}>
-            {/* PARTY CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* PARTY CARD */}
             {editMode && (
               <Card
                 className="mt-5"
@@ -176,8 +123,7 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Change Party</Card.Header>
-                <PartyForm />
+                <PartyForm allPokemonNames={allPokemonNames} />
               </Card>
             )}
 
@@ -189,7 +135,7 @@ export default function TrainerProfile() {
                 text={text}
               >
                 <Card.Header>
-                  Current Party {" "}
+                  Current Party{" "}
                   {trainer.parties[0]
                     ? `- ${trainer.parties[0].trainersParties.name}`
                     : ""}
@@ -222,7 +168,7 @@ export default function TrainerProfile() {
               </Card>
             )}
 
-            {/* BADGES CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* BADGES CARD */}
             {!editMode && (
               <Card
                 className="mt-5"
@@ -230,8 +176,7 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Current Badges</Card.Header>
-                <Card.Body style={{ textAlign: "center" }}>{badges}</Card.Body>
+                <BadgesCard />
               </Card>
             )}
 
@@ -242,7 +187,6 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Change Badges</Card.Header>
                 <BadgesForm />
               </Card>
             )}

@@ -12,6 +12,8 @@ import {
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS";
 export const LOG_OUT = "LOG_OUT";
 export const TOKEN_STILL_VALID = "TOKEN_STILL_VALID";
+export const PROFILE_UPDATED = "PROFILE_UPDATED";
+export const PARTY_UPDATED = "PARTY_UPDATED";
 
 const loginSuccess = (trainerWithToken) => {
   return {
@@ -25,6 +27,16 @@ const tokenStillValid = (trainerWithoutToken) => ({
   payload: trainerWithoutToken,
 });
 
+export const profileUpdated = (profile) => ({
+  type: PROFILE_UPDATED,
+  payload: profile,
+});
+
+export const partyUpdated = (party) => ({
+  type: PARTY_UPDATED,
+  payload: party,
+});
+
 export const register = (username, email, password) => {
   return async (dispatch, getState) => {
     dispatch(appLoading());
@@ -36,7 +48,13 @@ export const register = (username, email, password) => {
       });
 
       dispatch(loginSuccess(response.data));
-      dispatch(showMessageWithTimeout("success", true, "Account created! Welcome trainer!"));
+      dispatch(
+        showMessageWithTimeout(
+          "success",
+          true,
+          "Account created! Welcome trainer!"
+        )
+      );
       dispatch(appDoneLoading());
     } catch (error) {
       if (error.response) {
@@ -61,7 +79,9 @@ export const login = (email, password) => {
       });
 
       dispatch(loginSuccess(response.data));
-      dispatch(showMessageWithTimeout("success", false, "Welcome back trainer!", 1500));
+      dispatch(
+        showMessageWithTimeout("success", false, "Welcome back trainer!", 1500)
+      );
       dispatch(appDoneLoading());
     } catch (error) {
       if (error.response) {
@@ -102,6 +122,81 @@ export const getTrainerWithStoredToken = () => {
       // get rid of the token by logging out
       dispatch(logOut());
       dispatch(appDoneLoading());
+    }
+  };
+};
+
+export const updateProfile = (image, buddy, mainColor, secondaryColor) => {
+  return async (dispatch, getState) => {
+    try {
+      const { token, id } = selectTrainer(getState());
+      dispatch(appLoading());
+
+      const response = await axios.patch(
+        `${apiUrl}/auth/${id}`,
+        {
+          image,
+          buddy,
+          mainColor,
+          secondaryColor,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(profileUpdated(response.data));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const updateParty = (
+  firstPokemon,
+  secondPokemon,
+  thirdPokemon,
+  fourthPokemon,
+  fifthPokemon,
+  sixthPokemon
+) => {
+  return async (dispatch, getState) => {
+    try {
+      const { token, id } = selectTrainer(getState());
+      dispatch(appLoading());
+
+      const response = await axios.patch(
+        `${apiUrl}/party/${id}`,
+        {
+          firstPokemon,
+          secondPokemon,
+          thirdPokemon,
+          fourthPokemon,
+          fifthPokemon,
+          sixthPokemon,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(partyUpdated(response.data));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
     }
   };
 };
