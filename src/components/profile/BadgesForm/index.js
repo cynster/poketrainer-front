@@ -1,5 +1,4 @@
 import { Card, Form, Button, Row } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
 
 export default function BadgesForm() {
   return (

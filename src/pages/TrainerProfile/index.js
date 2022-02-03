@@ -1,24 +1,20 @@
-import moment from "moment";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Card, Row, Col, Button, Badge } from "react-bootstrap";
-//import { useNavigate, Link } from "react-router-dom";
-
+import { Container, Card, Row, Col, Button } from "react-bootstrap";
 // Components
 import Loading from "../../components/loading";
 import BadgesForm from "../../components/profile/BadgesForm";
 import PartyForm from "../../components/profile/PartyForm";
 import MainForm from "../../components/profile/MainForm";
 import MainCard from "../../components/profile/MainCard";
-//import PokeCard from "../../components/PokeCard";
 import BadgesCard from "../../components/profile/BadgesCard";
-
+// Selectors
 import { selectTrainerDetails } from "../../store/trainers/selectors";
 import { selectTrainer } from "../../store/trainer/selectors";
 import { selectPokemon } from "../../store/pokemon/selectors";
 import { selectAllPokemonNames } from "../../store/pokemon/selectors";
-
+// Actions
 import { fetchPokemonById, fetchBuddyById } from "../../store/pokemon/actions";
 import { fetchTrainerById } from "../../store/trainers/actions";
 import { fetchAllPokemonNames } from "../../store/pokemon/actions";
