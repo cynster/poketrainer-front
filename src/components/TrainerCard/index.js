@@ -1,5 +1,5 @@
 import { Card, Button, Col } from "react-bootstrap";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import moment from "moment";
 
 export default function TrainerCard(trainer) {
