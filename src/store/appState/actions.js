@@ -4,10 +4,18 @@ export const APP_LOADING = "APP_LOADING";
 export const APP_DONE_LOADING = "APP_DONE_LOADING";
 export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
+export const SET_DARKMODE = "SET_DARKMODE";
 
 export const appLoading = () => ({ type: APP_LOADING });
 export const appDoneLoading = () => ({ type: APP_DONE_LOADING });
 export const clearMessage = () => ({ type: CLEAR_MESSAGE });
+
+export const setMode = (mode) => {
+  return {
+    type: SET_DARKMODE,
+    payload: mode,
+  };
+};
 
 export const setMessage = (variant, dismissable, text) => {
   return {
@@ -32,5 +40,16 @@ export const showMessageWithTimeout = (
     const timeout = timeOutMilliSeconds || DEFAULT_MESSAGE_TIMEOUT;
 
     setTimeout(() => dispatch(clearMessage()), timeout);
+  };
+};
+
+export const setDarkmode = (boolean) => {
+  //console.log("trigger?", boolean);
+  return async (dispatch, getState) => {
+    if (boolean === true) {
+      dispatch(setMode(true));
+    }else{
+      dispatch(setMode(false));
+    }
   };
 };

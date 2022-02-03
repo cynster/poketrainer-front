@@ -3,18 +3,49 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 
-import { selectTrainer } from "../../store/trainer/selectors";
+import { selectTrainer } from "../../../store/trainer/selectors";
+import { updateProfile } from "../../../store/trainer/actions";
 
-
-export default function MainForm() {
-
-  const trainer = useSelector(selectTrainer)
-
+export default function MainForm(props) {
   const dispatch = useDispatch();
-  function submitForm(event) {
-    event.preventDefault();
+  const trainer = useSelector(selectTrainer);
 
-    //dispatch());
+  const [image, setImage] = useState(
+    trainer.image
+      ? trainer.image
+      : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
+  );
+  const [buddy, setBuddy] = useState(trainer.buddy ? trainer.buddy : "");
+  const [mainColor, setMainColor] = useState(
+    trainer.mainColor ? trainer.mainColor : ""
+  );
+  const [secondaryColor, setSecondaryColor] = useState(
+    trainer.secondaryColor ? trainer.secondaryColor : ""
+  );
+
+  // Makes the first character of the string upper case
+  function firstLetterUpperCase(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  // Shows 151 options; One for each pokemon.
+  function pokemonOptions() {
+    var result = [];
+    var number = 1;
+    props.allPokemonNames.map((pokemon) => {
+      result.push(
+        <option key={number} value={number}>{`${number}. ${firstLetterUpperCase(
+          pokemon.name
+        )}`}</option>
+      );
+      return number++;
+    });
+    return result;
+  }
+
+  function submitForm(event) {
+    //event.preventDefault();
+    dispatch(updateProfile(image, buddy, mainColor, secondaryColor));
   }
 
   return (
@@ -22,7 +53,10 @@ export default function MainForm() {
       <Form>
         <Form.Group className="mt-3">
           <Form.Label>Image</Form.Label>
-          <Form.Select defaultValue={trainer.buddy ? trainer.buddy : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"}>
+          <Form.Select
+            defaultValue={image}
+            onChange={(event) => setImage(event.target.value)}
+          >
             <option>Select</option>
             <option value="https://archives.bulbagarden.net/media/upload/7/79/Spr_BW_Striker.png">
               Striker
@@ -50,18 +84,22 @@ export default function MainForm() {
 
         <Form.Group className="mt-3">
           <Form.Label>Buddy</Form.Label>
-          <Form.Select defaultValue={trainer.buddy ? trainer.buddy : ""}>
-            <option value="">Select</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
+          <Form.Select
+            defaultValue={buddy}
+            onChange={(event) => setBuddy(event.target.value)}
+          >
+            <option>Select</option>
+            {pokemonOptions()}
           </Form.Select>
         </Form.Group>
 
         <Form.Group className="mt-3">
           <Form.Label>Main color</Form.Label>
-          <Form.Select defaultValue={trainer.mainColor ? trainer.mainColor : ""}>
-            <option value="">Select</option>
+          <Form.Select
+            defaultValue={mainColor}
+            onChange={(event) => setMainColor(event.target.value)}
+          >
+            <option>Select</option>
             <option value="light">Light-grey</option>
             <option value="secondary">Dark-grey</option>
             <option value="dark">Black</option>
@@ -75,8 +113,11 @@ export default function MainForm() {
 
         <Form.Group className="mt-3">
           <Form.Label>Secondary color</Form.Label>
-          <Form.Select defaultValue={trainer.secondaryColor ? trainer.secondaryColor : ""}>
-            <option value="">Select</option>
+          <Form.Select
+            defaultValue={secondaryColor}
+            onChange={(event) => setSecondaryColor(event.target.value)}
+          >
+            <option>Select</option>
             <option value="light">Light-grey</option>
             <option value="secondary">Dark-grey</option>
             <option value="dark">Black</option>
@@ -89,11 +130,7 @@ export default function MainForm() {
         </Form.Group>
 
         <Form.Group className="mt-3">
-          <Button
-            variant="primary"
-            type="submit"
-            //onClick={submitForm}
-          >
+          <Button variant="primary" type="submit" onClick={submitForm}>
             Save
           </Button>
         </Form.Group>

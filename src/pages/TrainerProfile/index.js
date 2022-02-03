@@ -2,48 +2,82 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container, Card, Row, Col, Button } from "react-bootstrap";
+import { Container, Card, Row, Col, Button, Badge } from "react-bootstrap";
 //import { useNavigate, Link } from "react-router-dom";
 
 // Components
 import Loading from "../../components/loading";
-import BadgesForm from "../../components/BadgesForm";
-import PartyForm from "../../components/PartyForm";
-import MainForm from "../../components/MainForm";
+import BadgesForm from "../../components/profile/BadgesForm";
+import PartyForm from "../../components/profile/PartyForm";
+import MainForm from "../../components/profile/MainForm";
+import MainCard from "../../components/profile/MainCard";
 //import PokeCard from "../../components/PokeCard";
-//import BadgesCard from "../../components/BadgesCard";
+import BadgesCard from "../../components/profile/BadgesCard";
 
-import { fetchTrainerById } from "../../store/trainers/actions";
 import { selectTrainerDetails } from "../../store/trainers/selectors";
 import { selectTrainer } from "../../store/trainer/selectors";
-
 import { selectPokemon } from "../../store/pokemon/selectors";
-import { fetchPokemonById } from "../../store/pokemon/actions";
+import { selectAllPokemonNames } from "../../store/pokemon/selectors";
+
+import { fetchPokemonById, fetchBuddyById } from "../../store/pokemon/actions";
+import { fetchTrainerById } from "../../store/trainers/actions";
+import { fetchAllPokemonNames } from "../../store/pokemon/actions";
 
 export default function TrainerProfile() {
+  const dispatch = useDispatch();
   const { id } = useParams();
+
   const trainer = useSelector(selectTrainerDetails);
   const user = useSelector(selectTrainer);
-  const dispatch = useDispatch();
+  const pokemons = useSelector(selectPokemon);
+  const allPokemonNames = useSelector(selectAllPokemonNames);
 
   const [editMode, setEditMode] = useState(false);
+  const [party, setParty] = useState([]);
 
-  //const buddyData = useSelector(selectPokemon());
+  const getPokemonById = (pokemonId) => {
+    const pokemon = pokemons.find((pokemon) => {
+      return pokemon.id === pokemonId;
+    });
+    return pokemon ? pokemon : { name: "", image: "" };
+  };
 
+  // Fetching Trainerdata
   useEffect(() => {
     dispatch(fetchTrainerById(id));
-    //dispatch(fetchPokemonById(trainer.buddy))
   }, [dispatch, id]);
 
+  //Slicing Party if there is a Trainer and the trainer has a party
+  useEffect(() => {
+    if (trainer && trainer.parties[0]) {
+      setParty(Object.values(trainer.parties[0]).slice(0, 6));
+    }
+  }, [trainer]);
+
+  // Fetching Pokemondata of the buddy if there is a buddy
+  useEffect(() => {
+    if (trainer) {
+      dispatch(fetchBuddyById(trainer.buddy));
+    }
+  }, [dispatch, trainer]);
+
+  // Fetching Pokemondata of the party Pokemon if there is a party
+  useEffect(() => {
+    if (party) {
+      party.forEach((pokemonId) => {
+        dispatch(fetchPokemonById(pokemonId));
+      });
+    }
+  }, [dispatch, party]);
+
+  // Fetching all names of supported Pokemon
+  useEffect(() => {
+    const supportedPokemon = 151;
+    dispatch(fetchAllPokemonNames(supportedPokemon));
+  }, [dispatch]);
+
+  // Show loading when trainer does not exist
   if (!trainer || parseInt(trainer.id) !== parseInt(id)) return <Loading />;
-
-  // Make pokemonparty array from Object to map only pokemon, if trainer has party
-  const party = trainer.parties[0]
-    ? Object.values(trainer.parties[0]).slice(0, 6)
-    : "";
-
-  // Badges
-  const badges = trainer.badges ? trainer.badges : "Trainer has no badges.";
 
   // Setting profile colors
   const mainColor = trainer.mainColor ? trainer.mainColor : "light";
@@ -53,17 +87,13 @@ export default function TrainerProfile() {
   // Show edit button when logged in trainer matches the TrainerdetailsID
   const displayEditButton = trainer.id === user.id;
 
-  // Makes the first character of the string upper case
-  function firstLetterUpperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
   return (
     <>
       <Container style={{ textAlign: "left" }}>
         <Row>
           <Col sm={3}>
-            {/* TRAINER CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* TRAINER CARD */}
+
             <Card
               className="mt-5"
               bg={mainColor}
@@ -73,75 +103,19 @@ export default function TrainerProfile() {
               {displayEditButton ? (
                 <Card>
                   <Button onClick={() => setEditMode(!editMode)}>
-                    {editMode ? "Done" : "Edit profile"}
+                    {editMode ? "Cancel" : "Edit profile"}
                   </Button>
                 </Card>
               ) : (
                 ""
               )}
-
-              {!editMode && (
-                <div>
-                  <Card.Img
-                    variant="top"
-                    src={
-                      trainer.image
-                        ? trainer.image
-                        : "https://archives.bulbagarden.net/media/upload/9/96/Spr_BW_Fisherman.png"
-                    }
-                  />
-                  <Card.Body>
-                    <Card.Title>
-                      Trainer {firstLetterUpperCase(trainer.username)}
-                    </Card.Title>
-                    <Card.Text>
-                      Joined on {moment(trainer.createdAt).format("LL")}
-                    </Card.Text>
-                    <Card.Text>
-                      Last updated{" "}
-                      {moment(trainer.createdAt).startOf("hour").fromNow()}
-                    </Card.Text>
-                    <hr />
-                    <Card.Title>Buddy</Card.Title>
-                    {trainer.buddy ? (
-                      <div>
-                        <Card.Text>
-                          <b>[IMAGE]</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>PokemonName</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Number:</b> {trainer.buddy}
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Type:</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Weight (hg):</b>
-                        </Card.Text>
-                        <Card.Text>
-                          <b>Height (dm):</b>
-                        </Card.Text>
-                      </div>
-                    ) : (
-                      "Trainer has no buddy."
-                    )}
-                  </Card.Body>
-                </div>
-              )}
-              {editMode && (
-                <div>
-                  <Card.Body>
-                    <MainForm />
-                  </Card.Body>
-                </div>
-              )}
+              {!editMode && <MainCard />}
+              {editMode && <MainForm allPokemonNames={allPokemonNames} />}
             </Card>
           </Col>
 
           <Col sm={9}>
-            {/* PARTY CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* PARTY CARD */}
             {editMode && (
               <Card
                 className="mt-5"
@@ -149,8 +123,7 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Change Party</Card.Header>
-                <PartyForm />
+                <PartyForm allPokemonNames={allPokemonNames} />
               </Card>
             )}
 
@@ -162,25 +135,25 @@ export default function TrainerProfile() {
                 text={text}
               >
                 <Card.Header>
-                  Current Party -{" "}
+                  Current Party{" "}
                   {trainer.parties[0]
-                    ? trainer.parties[0].trainersParties.name
-                    : "None"}
+                    ? `- ${trainer.parties[0].trainersParties.name}`
+                    : ""}
                 </Card.Header>
                 <Card.Body style={{ textAlign: "center" }}>
                   {trainer.parties[0] ? (
                     <Row xs={1} md={3}>
-                      {party.map((pokemon) => {
+                      {party.map((pokemonId) => {
                         return (
-                          <Col>
+                          <Col key={pokemonId}>
                             <Card bg={mainColor} text={text}>
                               <Card.Img
-                                src="https://cdn-icons-png.flaticon.com/128/743/743977.png"
+                                src={getPokemonById(pokemonId).image}
                                 alt="Pokemon image"
                               />
                               <Card.ImgOverlay>
                                 <Card.Title style={{ textAlign: "center" }}>
-                                  {pokemon}
+                                  {getPokemonById(pokemonId).name}
                                 </Card.Title>
                               </Card.ImgOverlay>
                             </Card>
@@ -195,7 +168,7 @@ export default function TrainerProfile() {
               </Card>
             )}
 
-            {/* BADGES CARD ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/}
+            {/* BADGES CARD */}
             {!editMode && (
               <Card
                 className="mt-5"
@@ -203,10 +176,7 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Current Badges</Card.Header>
-                <Card.Body style={{ textAlign: "center" }}>
-                  {badges}
-                </Card.Body>
+                <BadgesCard />
               </Card>
             )}
 
@@ -217,7 +187,6 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <Card.Header>Change Badges</Card.Header>
                 <BadgesForm />
               </Card>
             )}
