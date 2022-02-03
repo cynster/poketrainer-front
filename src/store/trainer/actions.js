@@ -133,7 +133,7 @@ export const updateProfile = (image, buddy, mainColor, secondaryColor) => {
       dispatch(appLoading());
 
       const response = await axios.patch(
-        `${apiUrl}/auth/${id}`,
+        `${apiUrl}/trainers/${id}`,
         {
           image,
           buddy,

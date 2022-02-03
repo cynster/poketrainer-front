@@ -36,7 +36,10 @@ function App() {
       className="App"
       style={
         darkMode
-          ? { backgroundColor: "#181818", height: "100vh" }
+          ? {
+              backgroundColor: "#181818",
+              height: "100vh",
+            }
           : { backgroundColor: "white" }
       }
     >

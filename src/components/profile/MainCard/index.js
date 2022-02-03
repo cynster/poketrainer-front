@@ -7,16 +7,13 @@ import { selectBuddy } from "../../../store/pokemon/selectors";
 import { selectTrainerDetails } from "../../../store/trainers/selectors";
 
 export default function MainCard() {
-  
-
-
-  
   const trainer = useSelector(selectTrainerDetails);
   const buddy = useSelector(selectBuddy);
 
   // Makes the first character of the string upper case
   function firstLetterUpperCase(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+    const name = string ? string : "";
+    return name.charAt(0).toUpperCase() + name.slice(1);
   }
 
   return (
@@ -44,7 +41,7 @@ export default function MainCard() {
         {trainer.buddy ? (
           <div>
             <Card.Text>
-              <b>{(buddy.name)}</b>
+              <b>{firstLetterUpperCase(buddy.name)}</b>
             </Card.Text>
             <Card.Img variant="top" src={buddy.image} />
             <Card.Text>
@@ -56,11 +53,11 @@ export default function MainCard() {
             </Card.Text>
             <Card.Text>
               <b>Weight: </b>
-              {buddy.weight} hg
+              {buddy.weight / 10} kg
             </Card.Text>
             <Card.Text>
               <b>Height: </b>
-              {buddy.height} dm
+              {buddy.height / 10} m
             </Card.Text>
           </div>
         ) : (

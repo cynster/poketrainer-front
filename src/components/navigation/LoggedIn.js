@@ -8,7 +8,7 @@ import { logOut } from "../../store/trainer/actions";
 import { selectTrainer } from "../../store/trainer/selectors";
 
 // Only shows when logged in
-export default function LoggedIn() {
+export default function LoggedIn(props) {
   const dispatch = useDispatch();
   const trainer = useSelector(selectTrainer);
   const trainerProfile= "/trainerprofile/"+ trainer.id;
@@ -16,7 +16,7 @@ export default function LoggedIn() {
   return (
     <>
       <NavbarItem path={trainerProfile} linkText="My Trainer Profile" />
-      <Nav.Item style={{ padding: ".5rem 1rem" }}>
+      <Nav.Item style={{ padding: ".5rem 1rem", color:`${props.darkMode ? "white" : "black"}` }}>
         Logged in as: {trainer.username}
       </Nav.Item>
       <Button onClick={() => dispatch(logOut())}>Logout</Button>
