@@ -18,6 +18,7 @@ import { selectAllPokemonNames } from "../../store/pokemon/selectors";
 import { fetchPokemonById, fetchBuddyById } from "../../store/pokemon/actions";
 import { fetchTrainerById } from "../../store/trainers/actions";
 import { fetchAllPokemonNames } from "../../store/pokemon/actions";
+import { updateBadges } from "../../store/trainer/actions";
 
 export default function TrainerProfile() {
   const dispatch = useDispatch();
@@ -37,12 +38,61 @@ export default function TrainerProfile() {
   const [editMode, setEditMode] = useState(false);
   const [party, setParty] = useState([]);
 
+  const [badge1, setBadge1] = useState(false);
+  const [badge2, setBadge2] = useState(false);
+  const [badge3, setBadge3] = useState(false);
+  const [badge4, setBadge4] = useState(false);
+  const [badge5, setBadge5] = useState(false);
+  const [badge6, setBadge6] = useState(false);
+  const [badge7, setBadge7] = useState(false);
+  const [badge8, setBadge8] = useState(false);
+
+  function submitBadgesForm() {
+    console.log(
+      "badges:",
+      badge1,
+      badge2,
+      badge3,
+      badge4,
+      badge5,
+      badge6,
+      badge7,
+      badge8
+    );
+    dispatch(
+      updateBadges(
+        badge1,
+        badge2,
+        badge3,
+        badge4,
+        badge5,
+        badge6,
+        badge7,
+        badge8
+      )
+    );
+  }
+
   const getPokemonById = (pokemonId) => {
     const pokemon = pokemons.find((pokemon) => {
       return pokemon.id === pokemonId;
     });
     return pokemon ? pokemon : { name: "", image: "" };
   };
+
+  // Set badges
+  useEffect(() => {
+    if (trainer) {
+      setBadge1(trainer.badge1);
+      setBadge2(trainer.badge2);
+      setBadge3(trainer.badge3);
+      setBadge4(trainer.badge4);
+      setBadge5(trainer.badge5);
+      setBadge6(trainer.badge6);
+      setBadge7(trainer.badge7);
+      setBadge8(trainer.badge8);
+    }
+  }, [dispatch, trainer]);
 
   // Fetching Trainerdata
   useEffect(() => {
@@ -148,14 +198,20 @@ export default function TrainerProfile() {
                       {party.map((pokemonId) => {
                         return (
                           <Col key={pokemonId}>
-                            <Card bg={mainColor} text={text} style={{marginBottom:"15px"}}>
+                            <Card
+                              bg={mainColor}
+                              text={text}
+                              style={{ marginBottom: "15px" }}
+                            >
                               <Card.Img
                                 src={getPokemonById(pokemonId).image}
                                 alt="Pokemon image"
                               />
                               <Card.ImgOverlay>
                                 <Card.Title style={{ textAlign: "center" }}>
-                                  {firstLetterUpperCase(getPokemonById(pokemonId).name)}
+                                  {firstLetterUpperCase(
+                                    getPokemonById(pokemonId).name
+                                  )}
                                 </Card.Title>
                               </Card.ImgOverlay>
                             </Card>
@@ -178,7 +234,16 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <BadgesCard />
+                <BadgesCard
+                  badge1={badge1}
+                  badge2={badge2}
+                  badge3={badge3}
+                  badge4={badge4}
+                  badge5={badge5}
+                  badge6={badge6}
+                  badge7={badge7}
+                  badge8={badge8}
+                />
               </Card>
             )}
 
@@ -189,7 +254,25 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <BadgesForm />
+                <BadgesForm
+                  badge1={badge1}
+                  badge2={badge2}
+                  badge3={badge3}
+                  badge4={badge4}
+                  badge5={badge5}
+                  badge6={badge6}
+                  badge7={badge7}
+                  badge8={badge8}
+                  setBadge1={setBadge1}
+                  setBadge2={setBadge2}
+                  setBadge3={setBadge3}
+                  setBadge4={setBadge4}
+                  setBadge5={setBadge5}
+                  setBadge6={setBadge6}
+                  setBadge7={setBadge7}
+                  setBadge8={setBadge8}
+                  submitForm={submitBadgesForm}
+                />
               </Card>
             )}
           </Col>

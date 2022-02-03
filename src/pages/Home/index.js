@@ -39,16 +39,16 @@ export default function Home() {
               <Card.Body>
                 <Card.Title>Welcome to the PokeTrainer website!</Card.Title>
                 <Card.Text>
-                  This website is the portfolio I built for my study at
-                  Codaisseur. Lorem ipsum dolor sit amet, consectetur adipiscing
-                  elit. Nullam facilisis vehicula pellentesque. Nullam dictum
-                  ultrices erat eu sollicitudin. Etiam eu fringilla diam, ac
-                  fringilla tellus. Ut vestibulum aliquet auctor. Sed ac lectus
-                  quam. Aliquam pulvinar orci at dapibus sodales. Quisque
-                  viverra, magna sed pulvinar semper, felis magna facilisis dui,
-                  at interdum nisl massa quis mi. Integer sed nibh vel nulla
-                  euismod aliquet. Donec faucibus ante ut dolor placerat
-                  lobortis.
+                  <p>
+                    This website is the portfolio I built for my study at
+                    Codaisseur. To show that I am a real developer, I must show
+                    some lorem ipsum. So here you go:
+                  </p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  Nullam facilisis vehicula pellentesque. Nullam dictum ultrices
+                  erat eu sollicitudin. Etiam eu fringilla diam, ac fringilla
+                  tellus. Ut vestibulum aliquet auctor. Sed ac lectus quam.
+                  Aliquam pulvinar orci at dapibus sodales.
                 </Card.Text>
                 <Card.Text>
                   <b>So what can I do on this website?</b>
