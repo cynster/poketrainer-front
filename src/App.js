@@ -2,7 +2,7 @@ import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { selectAppLoading } from "./store/appState/selectors";
 import { getTrainerWithStoredToken } from "./store/trainer/actions";
@@ -25,10 +25,22 @@ function App() {
     dispatch(getTrainerWithStoredToken());
   }, [dispatch]);
 
+  const [darkMode, setDarkMode] = useState(false);
+
+  const darkModeFunction = () => {
+    setDarkMode(!darkMode);
+  };
 
   return (
-    <div className="App">
-      <Navigation />
+    <div
+      className="App"
+      style={
+        darkMode
+          ? { backgroundColor: "#181818", height: "100vh" }
+          : { backgroundColor: "white" }
+      }
+    >
+      <Navigation darkMode={darkMode} darkModeFunction={darkModeFunction} />
       <MessageBox />
       {isLoading ? <Loading /> : null}
       <Routes>
