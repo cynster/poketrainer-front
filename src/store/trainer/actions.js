@@ -13,6 +13,14 @@ export const LOG_OUT = "LOG_OUT";
 export const TOKEN_STILL_VALID = "TOKEN_STILL_VALID";
 export const PROFILE_UPDATED = "PROFILE_UPDATED";
 export const PARTY_UPDATED = "PARTY_UPDATED";
+export const BADGES_UPDATED = "BADGES_UPDATED";
+
+const updateBadgesSucces = (profile) => {
+  return {
+    type: BADGES_UPDATED,
+    payload: profile,
+  };
+};
 
 const loginSuccess = (trainerWithToken) => {
   return {
@@ -151,6 +159,52 @@ export const updateProfile = (image, buddy, mainColor, secondaryColor) => {
         showMessageWithTimeout("success", false, "update successfull", 3000)
       );
       dispatch(profileUpdated(response.data));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const updateBadges = (
+  badge1,
+  badge2,
+  badge3,
+  badge4,
+  badge5,
+  badge6,
+  badge7,
+  badge8
+) => {
+  return async (dispatch, getState) => {
+    try {
+      const { token, id } = selectTrainer(getState());
+      dispatch(appLoading());
+
+      const response = await axios.patch(
+        `${apiUrl}/trainers/badges/${id}`,
+        {
+          badge1,
+          badge2,
+          badge3,
+          badge4,
+          badge5,
+          badge6,
+          badge7,
+          badge8,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      // console.log(response);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(updateBadgesSucces(response.data));
       dispatch(appDoneLoading());
     } catch (e) {
       console.log(e.message);
