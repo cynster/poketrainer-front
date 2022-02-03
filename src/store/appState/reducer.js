@@ -3,13 +3,11 @@ import {
   APP_DONE_LOADING,
   SET_MESSAGE,
   CLEAR_MESSAGE,
-  SET_DARKMODE
 } from "./actions";
 
 const initialState = {
   loading: false,
   message: null,
-  darkMode: false,
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
@@ -26,10 +24,6 @@ export default (state = initialState, action) => {
 
     case CLEAR_MESSAGE:
       return { ...state, message: null };
-
-    case SET_DARKMODE:
-      return { ...state, darkMode: action.payload };
-
     default:
       return state;
   }
