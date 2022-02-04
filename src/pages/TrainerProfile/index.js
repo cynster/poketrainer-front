@@ -19,6 +19,7 @@ import { fetchPokemonById, fetchBuddyById } from "../../store/pokemon/actions";
 import { fetchTrainerById } from "../../store/trainers/actions";
 import { fetchAllPokemonNames } from "../../store/pokemon/actions";
 import { updateBadges } from "../../store/trainer/actions";
+import { createParty } from "../../store/trainer/actions";
 
 export default function TrainerProfile() {
   const dispatch = useDispatch();
@@ -47,18 +48,12 @@ export default function TrainerProfile() {
   const [badge7, setBadge7] = useState(false);
   const [badge8, setBadge8] = useState(false);
 
+  function submitPartyForm() {
+    dispatch(createParty());
+    dispatch(fetchTrainerById(id));
+  }
+
   function submitBadgesForm() {
-    console.log(
-      "badges:",
-      badge1,
-      badge2,
-      badge3,
-      badge4,
-      badge5,
-      badge6,
-      badge7,
-      badge8
-    );
     dispatch(
       updateBadges(
         badge1,
@@ -175,7 +170,10 @@ export default function TrainerProfile() {
                 border={secondaryColor}
                 text={text}
               >
-                <PartyForm allPokemonNames={allPokemonNames} />
+                <PartyForm
+                  allPokemonNames={allPokemonNames}
+                  submitPartyForm={submitPartyForm}
+                />
               </Card>
             )}
 
@@ -196,27 +194,31 @@ export default function TrainerProfile() {
                   {trainer.parties[0] ? (
                     <Row xs={1} md={3}>
                       {party.map((pokemonId) => {
-                        return (
-                          <Col key={pokemonId}>
-                            <Card
-                              bg={mainColor}
-                              text={text}
-                              style={{ marginBottom: "15px" }}
-                            >
-                              <Card.Img
-                                src={getPokemonById(pokemonId).image}
-                                alt="Pokemon image"
-                              />
-                              <Card.ImgOverlay>
-                                <Card.Title style={{ textAlign: "center" }}>
-                                  {firstLetterUpperCase(
-                                    getPokemonById(pokemonId).name
-                                  )}
-                                </Card.Title>
-                              </Card.ImgOverlay>
-                            </Card>
-                          </Col>
-                        );
+                        if (pokemonId === null) {
+                          return "";
+                        } else {
+                          return (
+                            <Col key={pokemonId}>
+                              <Card
+                                bg={mainColor}
+                                text={text}
+                                style={{ marginBottom: "15px" }}
+                              >
+                                <Card.Img
+                                  src={getPokemonById(pokemonId).image}
+                                  alt="Pokemon image"
+                                />
+                                <Card.ImgOverlay>
+                                  <Card.Title style={{ textAlign: "center" }}>
+                                    {firstLetterUpperCase(
+                                      getPokemonById(pokemonId).name
+                                    )}
+                                  </Card.Title>
+                                </Card.ImgOverlay>
+                              </Card>
+                            </Col>
+                          );
+                        }
                       })}
                     </Row>
                   ) : (

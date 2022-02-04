@@ -13,6 +13,7 @@ export const LOG_OUT = "LOG_OUT";
 export const TOKEN_STILL_VALID = "TOKEN_STILL_VALID";
 export const PROFILE_UPDATED = "PROFILE_UPDATED";
 export const PARTY_UPDATED = "PARTY_UPDATED";
+export const PARTY_CREATED = "PARTY_CREATED";
 export const BADGES_UPDATED = "BADGES_UPDATED";
 
 const updateBadgesSucces = (profile) => {
@@ -41,6 +42,11 @@ export const profileUpdated = (profile) => ({
 
 export const partyUpdated = (party) => ({
   type: PARTY_UPDATED,
+  payload: party,
+});
+
+export const partyCreated = (party) => ({
+  type: PARTY_CREATED,
   payload: party,
 });
 
@@ -247,6 +253,31 @@ export const updateParty = (
         showMessageWithTimeout("success", false, "update successfull", 3000)
       );
       dispatch(partyUpdated(response.data));
+      dispatch(appDoneLoading());
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+};
+
+export const createParty = () => {
+  return async (dispatch, getState) => {
+    console.log("Am I HERE?!");
+    try {
+      const { token, id } = selectTrainer(getState());
+      dispatch(appLoading());
+
+      const response = await axios.post(`${apiUrl}/trainers/party/${id}`, {
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      });
+      // console.log(response);
+
+      dispatch(
+        showMessageWithTimeout("success", false, "update successfull", 3000)
+      );
+      dispatch(partyCreated(response.data));
       dispatch(appDoneLoading());
     } catch (e) {
       console.log(e.message);

@@ -1,4 +1,4 @@
-import { Card, Form, Button, Row } from "react-bootstrap";
+import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -153,7 +153,26 @@ export default function PartyForm(props) {
             </Form.Group>
           </Form>
         ) : (
-          <Card.Text>You don't have a party yet! Create one now:</Card.Text>
+          <Row>
+            <Col sm={2}>
+              <Card.Img src="https://archives.bulbagarden.net/media/upload/4/4c/Spr_FRLG_Oak.png" />
+            </Col>
+            <Col sm={10}>
+              <Card.Text>
+                You don't have a party yet. Click the button below, and
+                professor Oak will give you a random starter!
+              </Card.Text>
+              <p>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  onClick={props.submitPartyForm}
+                >
+                  Get starter!
+                </Button>
+              </p>
+            </Col>
+          </Row>
         )}
       </Card.Body>
     </div>
